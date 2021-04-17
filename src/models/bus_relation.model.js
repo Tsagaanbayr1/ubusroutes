@@ -5,7 +5,7 @@ const {
 class BusRelationModel {
     tableName = 'bus_relation';
 
-    find = async (params = {}) => {
+    async find(params = {}) {
         let sql = `SELECT * FROM ${this.tableName}`;
 
         if (!Object.keys(params).length) {
@@ -21,7 +21,7 @@ class BusRelationModel {
         return await query(sql, [...values]);
     }
 
-    findOne = async (params) => {
+    async findOne(params) {
         const {
             columnSet,
             values
@@ -36,12 +36,12 @@ class BusRelationModel {
         return result[0];
     }
 
-    create = async ({
+    async create({
         bus_id,
         route_id,
         seq,
         turn,
-    }) => {
+    }) {
         const sql = `INSERT INTO ${this.tableName}
         (bus_id, route_id, seq, turn) VALUES (?,?,?,?)`;
 
@@ -51,7 +51,7 @@ class BusRelationModel {
         return affectedRows;
     }
 
-    update = async (params, id) => {
+    async update(params, id) {
         const {
             columnSet,
             values
@@ -64,7 +64,7 @@ class BusRelationModel {
         return result;
     }
 
-    delete = async (id) => {
+    async delete(id) {
         const sql = `DELETE FROM ${this.tableName}
         WHERE id = ?`;
         const result = await query(sql, [id]);
