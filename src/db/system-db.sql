@@ -19,7 +19,7 @@ CREATE TABLE `bus_relation` (
   `stop_id` BIGINT NOT NULL,
   `route_id` BIGINT NOT NULL,
   `seq` INT NOT NULL,
-  `turn` BOOLEAN DEFAULT `true`,
+  `turn` BOOLEAN DEFAULT true
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- Foreign keys
 ALTER TABLE `bus_relation`
