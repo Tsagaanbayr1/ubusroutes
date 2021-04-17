@@ -75,3 +75,6 @@ class BusStopModel {
         return affectedRows;
     }
 }
+
+
+module.exports = new BusStopModel;

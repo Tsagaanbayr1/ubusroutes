@@ -3,7 +3,9 @@ const {
     multipleColumnSet
 } = require('../utils/common.utils');
 class BusRouteModel {
-    tableName = 'bus_route';
+    BusRouteModel() {
+        this.tableName = 'bus_route';
+    }
 
     async find(params = {}) {
         let sql = `SELECT * FROM ${this.tableName}`;
