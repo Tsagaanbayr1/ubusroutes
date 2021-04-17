@@ -1,0 +1,19 @@
+{
+  "name": "ubusroutes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tsagaanbayr1/ubusroutes.git"
+  },
+  "author": "Sukhee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tsagaanbayr1/ubusroutes/issues"
+  },
+  "homepage": "https://github.com/Tsagaanbayr1/ubusroutes#readme"
+}
