@@ -3,9 +3,11 @@ const {
     multipleColumnSet
 } = require('../utils/common.utils');
 class BusStopModel {
-    tableName = 'bus_stop';
+    BusStopModel() {
+        this.tableName = 'bus_stop';
+    }
 
-    find = async (params = {}) => {
+    async find(params = {}) {
         let sql = `SELECT * FROM ${this.tableName}`;
 
         if (!Object.keys(params).length) {
@@ -21,7 +23,7 @@ class BusStopModel {
         return await query(sql, [...values]);
     }
 
-    findOne = async (params) => {
+    async findOne(params) {
         const {
             columnSet,
             values
@@ -36,12 +38,12 @@ class BusStopModel {
         return result[0];
     }
 
-    create = async ({
+    async create({
         id,
         name,
         latitude,
         longitude,
-    }) => {
+    }) {
         const sql = `INSERT INTO ${this.tableName}
         (id, name, latitude, longitude) VALUES (?,?,?,?)`;
 
@@ -51,7 +53,7 @@ class BusStopModel {
         return affectedRows;
     }
 
-    update = async (params, id) => {
+    async update(params, id) {
         const {
             columnSet,
             values
@@ -64,7 +66,7 @@ class BusStopModel {
         return result;
     }
 
-    delete = async (id) => {
+    async delete(id) {
         const sql = `DELETE FROM ${this.tableName}
         WHERE id = ?`;
         const result = await query(sql, [id]);

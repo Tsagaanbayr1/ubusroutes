@@ -7,7 +7,7 @@ dotenv.config();
  *                              BusRoute Controller
  ******************************************************************************/
 class BusRouteController {
-    getAllBusRoutes = async (req, res, next) => {
+    async getAllBusRoutes(req, res, next) {
         let busRouteList = await BusRouteModel.find();
         if (!busRouteList.length) {
             throw new HttpException(404, 'BusRoutes not found');
@@ -23,7 +23,7 @@ class BusRouteController {
         res.send(busRouteList);
     };
 
-    getBusRouteById = async (req, res, next) => {
+    async getBusRouteById(req, res, next) {
         const busRoute = await BusRouteModel.findOne({
             code: req.params.id
         });
@@ -38,7 +38,7 @@ class BusRouteController {
         res.send(busRouteWithoutPassword);
     };
 
-    getBusRouteByName = async (req, res, next) => {
+    async getBusRouteByName(req, res, next) {
         const busRoute = await BusRouteModel.findOne({
             name: req.params.name
         });
@@ -53,7 +53,7 @@ class BusRouteController {
         res.send(busRouteWithoutPassword);
     };
 
-    createBusRoute = async (req, res, next) => {
+    async createBusRoute(req, res, next) {
         const result = await BusRouteModel.create(req.body);
 
         if (!result) {
@@ -63,7 +63,7 @@ class BusRouteController {
         res.status(201).send('BusRoute was created!');
     };
 
-    updateBusRoute = async (req, res, next) => {
+    async updateBusRoute(req, res, next) {
         const {
             ...restOfUpdates
         } = req.body;
@@ -91,7 +91,7 @@ class BusRouteController {
         });
     };
 
-    deleteBusRoute = async (req, res, next) => {
+    async deleteBusRoute(req, res, next) {
         const result = await BusRouteModel.delete(req.params.id);
         if (!result) {
             throw new HttpException(404, 'BusRoute not found');

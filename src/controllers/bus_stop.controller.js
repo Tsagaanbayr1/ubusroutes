@@ -7,7 +7,7 @@ dotenv.config();
  *                              BusStop Controller
  ******************************************************************************/
 class BusStopController {
-    getAllBusStops = async (req, res, next) => {
+    async getAllBusStops(req, res, next) {
         let busStopList = await BusStopModel.find();
         if (!busStopList.length) {
             throw new HttpException(404, 'BusStops not found');
@@ -21,9 +21,13 @@ class BusStopController {
         });
 
         res.send(busStopList);
-    };
+    }
 
-    getBusStopById = async (req, res, next) => {
+    async getAll() {
+
+    }
+
+    async getBusStopById(req, res, next) {
         const busStop = await BusStopModel.findOne({
             code: req.params.id
         });
@@ -36,9 +40,9 @@ class BusStopController {
         } = busStop;
 
         res.send(busStopWithoutPassword);
-    };
+    }
 
-    getBusStopByName = async (req, res, next) => {
+    async getBusStopByName(req, res, next) {
         const busStop = await BusStopModel.findOne({
             name: req.params.name
         });
@@ -51,9 +55,9 @@ class BusStopController {
         } = busStop;
 
         res.send(busStopWithoutPassword);
-    };
+    }
 
-    createBusStop = async (req, res, next) => {
+    async createBusStop(req, res, next) {
         const result = await BusStopModel.create(req.body);
 
         if (!result) {
@@ -61,9 +65,9 @@ class BusStopController {
         }
 
         res.status(201).send('BusStop was created!');
-    };
+    }
 
-    updateBusStop = async (req, res, next) => {
+    async updateBusStop(req, res, next) {
         const {
             ...restOfUpdates
         } = req.body;
@@ -89,15 +93,15 @@ class BusStopController {
             message,
             info
         });
-    };
+    }
 
-    deleteBusStop = async (req, res, next) => {
+    async deleteBusStop(req, res, next) {
         const result = await BusStopModel.delete(req.params.id);
         if (!result) {
             throw new HttpException(404, 'BusStop not found');
         }
         res.send('BusStop has been deleted');
-    };
+    }
 }
 
 

@@ -7,7 +7,7 @@ dotenv.config();
  *                              BusRelation Controller
  ******************************************************************************/
 class BusRelationController {
-    getAllBusRelations = async (req, res, next) => {
+    async getAllBusRelations(req, res, next) {
         let busRelationList = await BusRelationModel.find();
         if (!busRelationList.length) {
             throw new HttpException(404, 'BusRelations not found');
@@ -23,7 +23,7 @@ class BusRelationController {
         res.send(busRelationList);
     };
 
-    getBusRelationById = async (req, res, next) => {
+    async getBusRelationById(req, res, next) {
         const busRelation = await BusRelationModel.findOne({
             code: req.params.id
         });
@@ -38,7 +38,7 @@ class BusRelationController {
         res.send(busRelationWithoutPassword);
     };
 
-    getBusRelationByName = async (req, res, next) => {
+    async getBusRelationByName(req, res, next) {
         const busRelation = await BusRelationModel.findOne({
             name: req.params.name
         });
@@ -53,7 +53,7 @@ class BusRelationController {
         res.send(busRelationWithoutPassword);
     };
 
-    createBusRelation = async (req, res, next) => {
+    async createBusRelation(req, res, next) {
         const result = await BusRelationModel.create(req.body);
 
         if (!result) {
@@ -63,7 +63,7 @@ class BusRelationController {
         res.status(201).send('BusRelation was created!');
     };
 
-    updateBusRelation = async (req, res, next) => {
+    async updateBusRelation(req, res, next) {
         const {
             ...restOfUpdates
         } = req.body;
@@ -91,7 +91,7 @@ class BusRelationController {
         });
     };
 
-    deleteBusRelation = async (req, res, next) => {
+    async deleteBusRelation(req, res, next) {
         const result = await BusRelationModel.delete(req.params.id);
         if (!result) {
             throw new HttpException(404, 'BusRelation not found');
