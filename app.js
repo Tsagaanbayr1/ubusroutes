@@ -22,9 +22,9 @@ app.options("*", cors());
 
 const port = Number(process.env.PORT || 3331);
 
-app.use(`/api/busStop`, busStopRouter);
-app.use(`/api/busRoute`, busRouteRouter);
-app.use(`/api/busRelation`, busRelationRouter);
+app.use(`/ubus/busStop`, busStopRouter);
+app.use(`/ubus/busRoute`, busRouteRouter);
+app.use(`/ubus/busRelation`, busRelationRouter);
 
 // 404 error
 app.all('*', (req, res, next) => {
