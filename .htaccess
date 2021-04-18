@@ -1,0 +1,8 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home4/iurtuuc1/public_html/ubus"
+PassengerBaseURI "/ubus"
+PassengerNodejs "/home4/iurtuuc1/nodevenv/public_html/ubus/11/bin/node"
+PassengerAppType node
+PassengerStartupFile app.js
+PassengerAppLogFile "/home4/iurtuuc1/ubus/logs/passenger.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
