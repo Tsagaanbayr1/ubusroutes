@@ -12,9 +12,9 @@
     "url": "https://github.com/Tsagaanbayr1/ubusroutes/issues"
   },
   "homepage": "https://github.com/Tsagaanbayr1/ubusroutes#readme",
-  "main": "src/server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node app.js",
     "dev": "nodemon"
   },
   "dependencies": {
