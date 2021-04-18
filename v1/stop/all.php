@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
       echo json_encode(
           $response = array(
           'success' => true,
-          'message' => 'Амжилттай',
+          'message' => 'Successfully gets the data',
           'data' => $data
         )
       );
@@ -28,7 +28,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
       die(json_encode(
         $response = array(
           'success' => true,
-          'message' => 'Өгөгдөл алга'
+          'message' => 'Data not found'
         )
       ));
     }
