@@ -105,6 +105,4 @@ dist
 
 
 # Error messages
-./v1/relation/error_log
-./v1/stop/error_log
-./v1/route/error_log
+./v1/error_log
