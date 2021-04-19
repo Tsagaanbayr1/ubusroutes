@@ -72,18 +72,21 @@ WHERE
     if ($result = mysqli_query($conn, $query)) {
         if (mysqli_num_rows($result) > 0) {
             $data = array();
+            $stops = array();
             $current_route = "1"; // Current route id
             $found_bus = 0; // 0=not found, 1=started, 2=done
             while ($row = mysqli_fetch_row($result)) {
                 if ($row[0] != $current_route) {
                     $current_route = $row[0];
                     $found_bus = 0;
+                    if (!empty($stops)) $data[$current_route] = $stops;
+                    $stops = array();
                 }
                 if ($row[6] == $start) {
                     $found_bus = 1;
                 }
                 if ($found_bus == 1) {
-                    $data[] = $row;
+                    $stops[] = $row;
                 }
                 if ($row[6] == $end) {
                     $found_bus = 2;
