@@ -12,5 +12,5 @@ if ($conn->connect_error) {
 if (!$conn->set_charset("utf8")) {
   die("Could not use utf8: ");
 } else {
-  printf("Current character set: %s\n", $mysqli->character_set_name());
+  printf("Current character set: %s\n", $conn->character_set_name());
 }
