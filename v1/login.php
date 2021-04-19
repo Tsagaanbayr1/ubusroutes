@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       JSON_UNESCAPED_UNICODE
     ));
   // Холболт нээх
-  require_once('../connect.php');
+  require_once('./connect.php');
   // Бүх өгөгдлийг алдаагүй авах
   // Сервер талын баталгаажуулалт
   if (!isset($_POST['phone']) || !isset($_POST['password'])) {
