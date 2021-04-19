@@ -3,6 +3,7 @@ $table_name = 'bus_stop';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   // Холболт нээх
   require_once('../connect.php');
+  header('Content-Type: text/html; charset=utf-8');
   ini_set('default_charset', 'utf-8');
 
   // Датабаз дээр хийгдэх үйлдлүүд
