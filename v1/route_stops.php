@@ -20,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $route_id = $_GET['route_id'];
 
     // Датабаз дээр хийгдэх үйлдлүүд
-    $query = "SELECT * FROM bus_stop WHERE id IN(" .
-        "SELECT id FROM bus_relation WHERE route_id = $route_id ORDER BY seq DESC)";
+    $query = "SELECT bs.id AS id, bs.name AS name, bs.latitude AS latitude, bs.longitude AS longitude, br.seq AS seq, br.turn AS turn FROM bus_stop AS bs, bus_relation AS br WHERE bs.id = br.stop_id AND br.route_id = $route_id;";
 
     // Холболтыг ашиглан үйлдлүүдийг гүйцэтгэх
     if ($result = mysqli_query($conn, $query)) {
