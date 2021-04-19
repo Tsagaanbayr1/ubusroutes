@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             JSON_UNESCAPED_UNICODE
         ));
     }
-    $route_id = $_GET['stop_id'];
+    $stop_id = $_GET['stop_id'];
 
     // Датабаз дээр хийгдэх үйлдлүүд
     $query = "SELECT bro.id AS id, bro.name AS name FROM bus_route AS bro, bus_relation AS bre WHERE bro.id = bre.route_id AND bre.stop_id = $stop_id;";
