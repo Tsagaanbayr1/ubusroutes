@@ -21,38 +21,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Датабаз дээр хийгдэх үйлдлүүд
     $query = "SELECT
-        r.id, r.name
+    r.id,
+    r.name,
+    re.route_id,
+    re.id AS relation_id,
+    re.seq,
+    re.turn,
+    re.stop_id,
+    s.name AS stop_name,
+    s.latitude,
+    s.longitude
+FROM
+    bus_route AS r,
+    bus_stop AS s,
+    (
+    SELECT
+        r1.route_id AS route_id,
+        r1.stop_id AS stop_id,
+        r1.seq AS seq,
+        r1.turn AS turn,
+        r1.id AS id
+    FROM
+        bus_relation AS r1
+    INNER JOIN bus_relation AS r2
+    ON
+        r1.id = r2.id
+    WHERE
+        r1.route_id IN(
+        SELECT
+            route_id
         FROM
-            bus_route AS r,
-            (
-            SELECT
-            DISTINCT( r1.route_id )AS id
-            FROM
-                bus_relation AS r1
-            INNER JOIN bus_relation AS r2
-            ON
-                r1.id = r2.id
-            WHERE
-                r1.route_id IN(
-                SELECT
-                    route_id
-                FROM
-                    bus_relation
-                WHERE
-                    stop_id = $start
-            ) AND r2.route_id IN(
-            SELECT
-                route_id
-            FROM
-                bus_relation
-            WHERE
-                stop_id = $end
-        )
-        ORDER BY
-            r1.seq
-        ) AS re
+            bus_relation
         WHERE
-            r.id = re.id";
+            stop_id = $start
+    ) AND r2.route_id IN(
+    SELECT
+        route_id
+    FROM
+        bus_relation
+    WHERE
+        stop_id = $end
+)
+ORDER BY
+    r1.seq
+) AS re
+WHERE
+    r.id = re.route_id AND s.id = re.stop_id";
 
     // Холболтыг ашиглан үйлдлүүдийг гүйцэтгэх
     if ($result = mysqli_query($conn, $query)) {
