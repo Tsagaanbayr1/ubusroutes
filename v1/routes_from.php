@@ -72,8 +72,23 @@ WHERE
     if ($result = mysqli_query($conn, $query)) {
         if (mysqli_num_rows($result) > 0) {
             $data = array();
-            while ($row = mysqli_fetch_row($result))
-                $data[] = $row;
+            $current_route = "1"; // Current route id
+            $found_bus = 0; // 0=not found, 1=started, 2=done
+            while ($row = mysqli_fetch_row($result)) {
+                if ($row['id'] != $current_route) {
+                    $current_route = $row['id'];
+                    $found_bus = 0;
+                }
+                if ($row['stop_id'] == $start) {
+                    $found_bus = 1;
+                }
+                if ($found_bus == 1) {
+                    $data[] = $row;
+                }
+                if ($row['stop_id'] == $end) {
+                    $found_bus = 2;
+                }
+            }
             // Холболт хаах
             mysqli_close($conn);
             echo json_encode(

@@ -11,6 +11,4 @@ if ($conn->connect_error) {
 /* change character set to utf8 */
 if (!$conn->set_charset("utf8")) {
   die("Could not use utf8: ");
-} else {
-  printf("Current character set: %s\n", $conn->character_set_name());
 }
