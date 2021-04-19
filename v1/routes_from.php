@@ -1,12 +1,58 @@
 <?php
-$table_name = 'bus_relation';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Холболт нээх
     require_once('../connect.php');
-    header('Content-Type: text/html; charset=utf-8');
+
+    // Бүх өгөгдлийг алдаагүй авах
+    // Сервер талын баталгаажуулалт
+    if (!isset($_GET['start']) || !isset($_GET['end'])) {
+        // Холболт хаах
+        mysqli_close($conn);
+        die(json_encode(
+            $response = array(
+                'success' => false,
+                'message' => 'Input wrong data, ' . $_GET['start'] . $_GET['end']
+            ),
+            JSON_UNESCAPED_UNICODE
+        ));
+    }
+    $start = $_GET['start'];
+    $end = $_GET['end'];
 
     // Датабаз дээр хийгдэх үйлдлүүд
-    $query = "SELECT * FROM $table_name";
+    $query = "SELECT
+        r.id, r.name
+        FROM
+            bus_route AS r,
+            (
+            SELECT
+            DISTINCT( r1.route_id )AS id
+            FROM
+                bus_relation AS r1
+            INNER JOIN bus_relation AS r2
+            ON
+                r1.id = r2.id
+            WHERE
+                r1.route_id IN(
+                SELECT
+                    route_id
+                FROM
+                    bus_relation
+                WHERE
+                    stop_id = $start
+            ) AND r2.route_id IN(
+            SELECT
+                route_id
+            FROM
+                bus_relation
+            WHERE
+                stop_id = $end
+        )
+        ORDER BY
+            r1.seq
+        ) AS re
+        WHERE
+            r.id = re.id";
 
     // Холболтыг ашиглан үйлдлүүдийг гүйцэтгэх
     if ($result = mysqli_query($conn, $query)) {
