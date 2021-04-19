@@ -3,7 +3,6 @@ $table_name = 'bus_relation';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   // Холболт нээх
   require_once('../connect.php');
-  header('Content-Type: text/html; charset=utf-8');
 
   // Датабаз дээр хийгдэх үйлдлүүд
   $query = "SELECT * FROM $table_name";

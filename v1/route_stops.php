@@ -2,7 +2,6 @@
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Холболт нээх
     require_once('../connect.php');
-    header('Content-Type: text/html; charset=utf-8');
 
     // Бүх өгөгдлийг алдаагүй авах
     // Сервер талын баталгаажуулалт
