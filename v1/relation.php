@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       JSON_UNESCAPED_UNICODE
     ));
   }
-  $route_id = $_GET['relation_id'];
+  $relation_id = $_GET['relation_id'];
 
   // Датабаз дээр хийгдэх үйлдлүүд
   $query = "SELECT * FROM $table_name WHERE id = $relation_id LIMIT 1";
