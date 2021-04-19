@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     die(json_encode(
       $response = array(
         'success' => false,
-        'message' => 'Input wrong data, ' . $_POST['phone'] . ', ' . $_POST['password']
+        'message' => 'Input wrong data'
       ),
       JSON_UNESCAPED_UNICODE
     ));

@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     die(json_encode(
       $response = array(
         'success' => false,
-        'message' => 'Input wrong data, ' . $_GET['route_id']
+        'message' => 'Input wrong data'
       ),
       JSON_UNESCAPED_UNICODE
     ));
