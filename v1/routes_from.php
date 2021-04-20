@@ -78,11 +78,10 @@ WHERE
         if (mysqli_num_rows($result) > 0) {
             $currentRoute = "1"; // Current route id
             // Find starting waypoints
-            $sData = array();
+            $data = array();
             $sStops = array();
             $sIsFoundBus = 0; // 0=not found, 1=started, 2=done
             // Find ending waypoints
-            $eData = array();
             $eStops = array();
             $eIsFoundBus = 0; // 0=not found, 1=started, 2=done
             while ($row = mysqli_fetch_row($result)) {
@@ -90,8 +89,8 @@ WHERE
                     $currentRoute = $row[0];
                     $sIsFoundBus = 0;
                     $eIsFoundBus = 0;
-                    if ((count($sStops) < count($eStops) && !empty($sStops)) || (empty($eStops) && !empty($sStops))) $data[$currentRoute] = $sStops;
-                    else if ((count($sStops) > count($eStops) && !empty($eStops)) || (empty($sStops) && !empty($eStops))) $data[$currentRoute] = $eStops;
+                    if (!empty($sStops) && (count($sStops) < count($eStops) && !empty($sStops) || empty($eStops))) $data[$currentRoute] = $sStops;
+                    else if (!empty($eStops) && ((count($eStops) < count($sStops)) || empty($sStops))) $data[$currentRoute] = $eStops;
                     else echo $eStops . ', ' . $sStops . '             ';
                     $sStops = array();
                     $eStops = array();
@@ -109,8 +108,6 @@ WHERE
 
                 // echo $row[7] . '=' . $startName . '\n';
             }
-            if ($sData < $eData) $data = $sData;
-            else $data = $eData;
             // Холболт хаах
             mysqli_close($conn);
             echo json_encode(
