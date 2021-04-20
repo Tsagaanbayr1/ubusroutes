@@ -90,8 +90,11 @@ WHERE
                     $currentRoute = $row[0];
                     $sIsFoundBus = 0;
                     $eIsFoundBus = 0;
-                    if (!empty($sStops) && !empty($eStops) && count($sStops) < count($eStops)) $data[$currentRoute] = $sStops;
-                    else if (!empty($sStops) && !empty($eStops) && count($sStops) > count($eStops)) $data[$currentRoute] = $eStops;
+                    if (!empty($sStops) && !empty($eStops)) {
+                        if (count($sStops) < count($eStops)) $data[$currentRoute] = $sStops;
+                        else if (count($sStops) > count($eStops)) $data[$currentRoute] = $eStops;
+                        else echo $eStops . ', ' . $sStops . '             ';
+                    }
                     $sStops = array();
                     $eStops = array();
                 }
@@ -99,14 +102,14 @@ WHERE
                 if ($row[7] == $startName && $sIsFoundBus == 0) $sIsFoundBus = 1;
                 if ($sIsFoundBus == 1) $sStops[] = $row;
                 if ($row[7] == $endName && $sIsFoundBus == 1) $sIsFoundBus = 2;
-                echo $row[7] . '=' . $endName . '\n';
+                // echo $row[7] . '=' . $endName . '\n';
 
                 // Ending
                 if ($row[7] == $endName && $eIsFoundBus == 0) $eIsFoundBus = 1;
                 if ($eIsFoundBus == 1) $eStops[] = $row;
                 if ($row[7] == $startName && $eIsFoundBus == 1) $eIsFoundBus = 2;
 
-                echo $row[7] . '=' . $startName . '\n';
+                // echo $row[7] . '=' . $startName . '\n';
             }
             if ($sData < $eData) $data = $sData;
             else $data = $eData;
