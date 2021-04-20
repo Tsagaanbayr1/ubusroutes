@@ -5,7 +5,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Бүх өгөгдлийг алдаагүй авах
     // Сервер талын баталгаажуулалт
-    if (!isset($_GET['start']) || !isset($_GET['end'])) {
+    if (
+        !isset($_GET['startId']) || !isset($_GET['startName']) ||
+        !isset($_GET['endId']) || !isset($_GET['endName'])
+    ) {
         // Холболт хаах
         mysqli_close($conn);
         die(json_encode(
@@ -16,8 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             JSON_UNESCAPED_UNICODE
         ));
     }
-    $start = $_GET['start'];
-    $end = $_GET['end'];
+    $startId = $_GET['startId'];
+    $startName = $_GET['startName'];
+    $endId = $_GET['endId'];
+    $endName = $_GET['endName'];
 
     // Датабаз дээр хийгдэх үйлдлүүд
     $query = "SELECT
@@ -53,14 +58,14 @@ FROM
         FROM
             bus_relation
         WHERE
-            stop_id = $start
+            stop_id = $startId
     ) AND r2.route_id IN(
     SELECT
         route_id
     FROM
         bus_relation
     WHERE
-        stop_id = $end
+        stop_id = $endId
 )
 ORDER BY
     r1.seq
@@ -71,27 +76,37 @@ WHERE
     // Холболтыг ашиглан үйлдлүүдийг гүйцэтгэх
     if ($result = mysqli_query($conn, $query)) {
         if (mysqli_num_rows($result) > 0) {
-            $data = array();
-            $stops = array();
-            $current_route = "1"; // Current route id
-            $found_bus = 0; // 0=not found, 1=started, 2=done
+            $currentRoute = "1"; // Current route id
+            // Find starting waypoints
+            $sData = array();
+            $sStops = array();
+            $sIsFoundBus = 0; // 0=not found, 1=started, 2=done
+            // Find ending waypoints
+            $eData = array();
+            $eStops = array();
+            $eIsFoundBus = 0; // 0=not found, 1=started, 2=done
             while ($row = mysqli_fetch_row($result)) {
-                if ($row[0] != $current_route) {
-                    $current_route = $row[0];
-                    $found_bus = 0;
-                    if (!empty($stops)) $data[$current_route] = $stops;
-                    $stops = array();
+                if ($row[0] != $currentRoute) {
+                    $currentRoute = $row[0];
+                    $sIsFoundBus = 0;
+                    $eIsFoundBus = 0;
+                    if (!empty($sStops) && !empty($eStops) && count($sStops) < count($eStops)) $data[$currentRoute] = $sStops;
+                    else if (!empty($sStops) && !empty($eStops) && count($sStops) > count($eStops)) $data[$currentRoute] = $eStops;
+                    $sStops = array();
+                    $eStops = array();
                 }
-                if ($row[6] == $start) {
-                    $found_bus = 1;
-                }
-                if ($found_bus == 1) {
-                    $stops[] = $row;
-                }
-                if ($row[6] == $end) {
-                    $found_bus = 2;
-                }
+                // Starting
+                if ($row[7] == $startName && $sIsFoundBus == 0) $sIsFoundBus = 1;
+                if ($sIsFoundBus == 1) $sStops[] = $row;
+                if ($row[7] == $endName && $sIsFoundBus == 1) $sIsFoundBus = 2;
+
+                // Ending
+                if ($row[7] == $endName && $eIsFoundBus == 0) $eIsFoundBus = 1;
+                if ($eIsFoundBus == 1) $eStops[] = $row;
+                if ($row[7] == $startName && $eIsFoundBus == 1) $eIsFoundBus = 2;
             }
+            if ($sData < $eData) $data = $sData;
+            else $data = $eData;
             // Холболт хаах
             mysqli_close($conn);
             echo json_encode(
