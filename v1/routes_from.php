@@ -89,8 +89,10 @@ WHERE
                     $currentRoute = $row[0];
                     $sIsFoundBus = 0;
                     $eIsFoundBus = 0;
-                    if (!empty($sStops) && (count($sStops) < count($eStops) && !empty($sStops) || empty($eStops))) $data[$currentRoute] = $sStops;
-                    else if (!empty($eStops) && ((count($eStops) < count($sStops)) || empty($sStops))) $data[$currentRoute] = $eStops;
+                    // if (!empty($sStops) && (count($sStops) < count($eStops) && !empty($sStops) || empty($eStops)))
+                    $data[$currentRoute] = [$sStops, $eStops];
+                    // else if (!empty($eStops) && ((count($eStops) < count($sStops)) || empty($sStops)))
+                    // $data[$currentRoute] = $eStops;
                     // else echo $eStops . ', ' . $sStops . '             ';
                     $sStops = array();
                     $eStops = array();
