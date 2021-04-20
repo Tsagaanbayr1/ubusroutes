@@ -104,6 +104,8 @@ WHERE
                 if ($row[7] == $endName && $eIsFoundBus == 0) $eIsFoundBus = 1;
                 if ($eIsFoundBus == 1) $eStops[] = $row;
                 if ($row[7] == $startName && $eIsFoundBus == 1) $eIsFoundBus = 2;
+
+                echo $row[7];
             }
             if ($sData < $eData) $data = $sData;
             else $data = $eData;
