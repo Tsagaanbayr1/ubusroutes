@@ -90,9 +90,9 @@ WHERE
                     $sIsFoundBus = 0;
                     $eIsFoundBus = 0;
                     // if (!empty($sStops) && (count($sStops) < count($eStops) && !empty($sStops) || empty($eStops)))
-                    $data[$currentRoute] = [$sStops, $eStops];
+                    $data[$currentRoute . 's'] = $sStops;
                     // else if (!empty($eStops) && ((count($eStops) < count($sStops)) || empty($sStops)))
-                    // $data[$currentRoute] = $eStops;
+                    $data[$currentRoute . 'e'] = $eStops;
                     // else echo $eStops . ', ' . $sStops . '             ';
                     $sStops = array();
                     $eStops = array();
