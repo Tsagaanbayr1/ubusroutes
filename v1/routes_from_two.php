@@ -25,75 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $endName = $_GET['endName'];
 
     // Датабаз дээр хийгдэх үйлдлүүд
-    $query = "SELECT r.id,r.name, re.route_id,re.id AS relation_id,re.seq,re.turn,re.stop_id, s.name AS stop_name,s.latitude,s.longitude
-    FROM bus_route AS r, bus_stop AS s,
-        (SELECT route_id,stop_id,seq,turn,id
-            FROM bus_relation AS r1
-            WHERE r1.route_id IN(
-                    SELECT route_id
-                    FROM bus_relation
-                    WHERE stop_id IN ($startId, $endId)
-                ) ORDER BY r1.seq) AS re
-    WHERE r.id = re.route_id AND s.id = re.stop_id";
+    // Эхлэлийн цэгээр дайрдаг чиглэлүүдийг олох Query
+    $query1 = "SELECT DISTINCT r.* FROM bus_route r INNER JOIN bus_relation e ON r.id = e.route_id WHERE e.stop_id = $startId";
+    // Төгсгөлийн цэгээр дайрдаг чиглэлүүдийг олох Query
+    $query2 = "SELECT DISTINCT r.* FROM bus_route r INNER JOIN bus_relation e ON r.id = e.route_id WHERE e.stop_id = $endId";
 
     // Холболтыг ашиглан үйлдлүүдийг гүйцэтгэх
-    if ($result = mysqli_query($conn, $query)) {
-        if (mysqli_num_rows($result) > 0) {
-            $currentRoute = "1"; // Current route id
-            // Find starting waypoints
-            $data = array();
-            $sStops = array();
-            $sIsFoundBus = 0; // 0=not found, 1=started, 2=done
-            // Find ending waypoints
-            $eStops = array();
-            $eIsFoundBus = 0; // 0=not found, 1=started, 2=done
-            while ($row = mysqli_fetch_row($result)) {
-                if ($row[0] != $currentRoute) {
-                    $currentRoute = $row[0];
-                    $sIsFoundBus = 0;
-                    $eIsFoundBus = 0;
-                    if (!empty($sStops) && (count($sStops) < count($eStops) && !empty($sStops) || empty($eStops)))
-                        $data[$currentRoute] = $sStops;
-                    else if (!empty($eStops) && ((count($eStops) < count($sStops)) || empty($sStops)))
-                        $data[$currentRoute] = $eStops;
-                    // else echo $eStops . ', ' . $sStops . '             ';
-                    $sStops = array();
-                    $eStops = array();
-                }
-                // Starting
-                if ($row[7] == $startName && $sIsFoundBus == 0) $sIsFoundBus = 1;
-                if ($sIsFoundBus == 1) $sStops[] = $row;
-                if ($row[7] == $endName && $sIsFoundBus == 1) $sIsFoundBus = 2;
-                // echo $row[7] . '=' . $endName . '\n';
-
-                // Ending
-                if ($row[7] == $endName && $eIsFoundBus == 0) $eIsFoundBus = 1;
-                if ($eIsFoundBus == 1) $eStops[] = $row;
-                if ($row[7] == $startName && $eIsFoundBus == 1) $eIsFoundBus = 2;
-
-                // echo $row[7] . '=' . $startName . '\n';
-            }
-            // Холболт хаах
-            mysqli_close($conn);
-            echo json_encode(
-                $response = array(
-                    'success' => true,
-                    'message' => 'Successfully gets the data',
-                    'data' => $data
-                ),
-                JSON_UNESCAPED_UNICODE
-            );
-        } else {
-            // Холболт хаах
-            mysqli_close($conn);
-            die(json_encode(
-                $response = array(
-                    'success' => true,
-                    'message' => 'Data not found'
-                ),
-                JSON_UNESCAPED_UNICODE
-            ));
-        }
+    if ($result1 = mysqli_query($conn, $query1) && $result2 = mysqli_query($conn, $query2)) {
+        //
+        echo 'worked';
     } else {
         // MySQL ажиллагааны алдааны шалтгаан
         $errorMessage = mysqli_error($conn);

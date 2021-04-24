@@ -25,34 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $endName = $_GET['endName'];
 
     // Датабаз дээр хийгдэх үйлдлүүд
-    $query = "SELECT r.id,
-    r.name,
-    re.route_id,
-    re.id AS relation_id,
-    re.seq,
-    re.turn,
-    re.stop_id,
-    s.name AS stop_name,
-    s.latitude,
-    s.longitude
-    FROM bus_route AS r,
-        bus_stop AS s,
-        (
-            SELECT route_id,
-                stop_id,
-                seq,
-                turn,
-                id
+    $query = "SELECT r.id, r.name, re.route_id, re.id AS relation_id, re.seq, re.turn, re.stop_id, s.name AS stop_name, s.latitude, s.longitudeFROM bus_route AS r, bus_stop AS s,
+        (   SELECT route_id, stop_id, seq, turn, id
             FROM bus_relation AS r1
             WHERE r1.route_id IN(
                     SELECT route_id
                     FROM bus_relation
                     WHERE stop_id IN ($startId, $endId)
-                )
-            ORDER BY r1.seq
-        ) AS re
-    WHERE r.id = re.route_id
-        AND s.id = re.stop_id";
+                ) ORDER BY r1.seq ) AS re
+    WHERE r.id = re.route_id AND s.id = re.stop_id";
 
     // Холболтыг ашиглан үйлдлүүдийг гүйцэтгэх
     if ($result = mysqli_query($conn, $query)) {
