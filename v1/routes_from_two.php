@@ -69,12 +69,13 @@ INNER JOIN bus_relation e
     if ($result = mysqli_query($conn, $query)) {
         //
         if (mysqli_num_rows($result) > 0) {
-
+            $data = array();
             while ($row = mysqli_fetch_row($result)) {
                 foreach ($row as $data) {
-                    echo $row;
+                    $data[] = $row;
                 }
             }
+            echo json_encode($data);
         } else {
             // Холболт хаах
             mysqli_close($conn);
