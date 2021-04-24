@@ -30,10 +30,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Төгсгөлийн цэгээр дайрдаг чиглэлүүдийг олох Query
     $query2 = "SELECT DISTINCT r.* FROM bus_route r INNER JOIN bus_relation e ON r.id = e.route_id WHERE e.stop_id = $endId";
 
+    $query = "SELECT * FROM 
+    (SELECT DISTINCT e1.id AS relation_id, e1.stop_id AS stop_id, r.id AS route_id, r.name AS route_name
+    FROM bus_route r
+    INNER JOIN bus_relation AS e ON r.id = e.route_id
+    INNER JOIN bus_relation AS e1 ON e1.stop_id IN (SELECT stop_id FROM bus_relation WHERE route_id = r.id)
+    WHERE e.stop_id = $startId) AS data1
+    INNER JOIN
+    (SELECT DISTINCT e1.id AS relation_id, e1.stop_id AS stop_id, r.id AS route_id, r.name AS route_name
+    FROM bus_route r
+    INNER JOIN bus_relation AS e ON r.id = e.route_id
+    INNER JOIN bus_relation AS e1 ON e1.stop_id IN (SELECT stop_id FROM bus_relation WHERE route_id = r.id)
+    WHERE e.stop_id = $endId) AS data2
+    ON data1.route_id = data2.route_id";
+    /*
+SELECT DISTINCT e1.id AS relation_id, e1.stop_id AS stop_id, r.id AS route_id, r.name AS route_name
+FROM bus_route r
+INNER JOIN bus_relation AS e ON r.id = e.route_id
+INNER JOIN bus_relation AS e1 ON e1.stop_id IN (SELECT stop_id FROM bus_relation WHERE route_id = r.id)
+WHERE e.stop_id = 376
+ */
+
+    /*
+SELECT * FROM 
+bus_route e,
+(SELECT *
+FROM bus_route r 
+INNER JOIN bus_relation e 
+ ON r.id = e.route_id 
+ WHERE e.stop_id = 380) r1,
+(SELECT *
+FROM bus_route r 
+INNER JOIN bus_relation e 
+ ON r.id = e.route_id 
+ WHERE e.stop_id = 376) r2
+ */
     // Холболтыг ашиглан үйлдлүүдийг гүйцэтгэх
-    if ($result1 = mysqli_query($conn, $query1) && $result2 = mysqli_query($conn, $query2)) {
+    if ($result = mysqli_query($conn, $query)) {
         //
-        echo 'worked';
+        if (mysqli_num_rows($result) > 0) {
+
+            while ($row = mysqli_fetch_row($result)) {
+                echo $row;
+            }
+        } else {
+            // Холболт хаах
+            mysqli_close($conn);
+            die(json_encode(
+                $response = array(
+                    'success' => true,
+                    'message' => 'Data not found'
+                ),
+                JSON_UNESCAPED_UNICODE
+            ));
+        }
     } else {
         // MySQL ажиллагааны алдааны шалтгаан
         $errorMessage = mysqli_error($conn);
