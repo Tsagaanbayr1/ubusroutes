@@ -71,7 +71,9 @@ INNER JOIN bus_relation e
         if (mysqli_num_rows($result) > 0) {
 
             while ($row = mysqli_fetch_row($result)) {
-                echo $row;
+                foreach ($row as $data) {
+                    echo $row;
+                }
             }
         } else {
             // Холболт хаах
